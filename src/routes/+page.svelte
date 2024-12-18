@@ -9,6 +9,8 @@
     import IconOptions from "$lib/IconOptions.svelte";
     import { ScrollArea } from "$lib/components/ui/scroll-area";
     import { renderIcon } from "$lib/icons";
+    import { Tooltip, TooltipContent, TooltipTrigger } from "$lib/components/ui/tooltip";
+    import { AlarmClockOff, Github } from "lucide-svelte";
 
     let activeType = $state("icon");
 
@@ -17,16 +19,10 @@
     let shadow = $state(0);
     let shadowOptions = ["none", "sm", "md", "lg", "xl", "2xl"];
     let hex = $state("#f6f0dc");
-    let rgb = $state({
+    let bgRgb = $state({
         r: 137,
         g: 73,
         b: 255,
-        a: 1,
-    });
-    let hsv = $state({
-        h: 46,
-        s: 11,
-        v: 96,
         a: 1,
     });
 
@@ -60,9 +56,76 @@
 
 </script>
 
-<header class="h-[50px]">
+<header class="h-[50px] overflow-hidden">
     <div class="flex flex-row justify-between items-center h-full">
         <div class="flex flex-row items-center gap-2 font-bold text-lg pl-4">Logo Builder</div>
+
+        <div class="flex items-center">
+            <h2 class="text-muted-foreground text-sm">
+                Presets
+            </h2>
+            <div class="flex flex-row gap-4 px-2">
+                <Tooltip closeDelay={0}>
+                    <TooltipTrigger>
+                        <button class="bg-black p-2 group" onclick={() => {
+                            bgRgb = {
+                                r: 0,
+                                g: 0,
+                                b: 0,
+                                a: 1,
+                            };
+
+                            borderColour = {
+                                r: 255,
+                                g: 255,
+                                b: 255,
+                                a: 1,
+                            };
+                        }}>
+                            <AlarmClockOff class="text-white group-hover:scale-110" />
+                        </button>
+                    </TooltipTrigger>
+                    <TooltipContent class="bg-black text-white max-w-[400px] p-4">
+                        <p class="font-bold">Black & White</p>
+                        <p>Great for startups that want to look professional, serious, and modern. For example, Apple and Nike.</p>
+                    </TooltipContent>
+                </Tooltip>
+
+                <Tooltip closeDelay={0}>
+                    <TooltipTrigger>
+                        <button class="bg-[#ffeda0] p-2 group" onclick={() => {
+                            bgRgb = {
+                                r: 255,
+                                g: 237,
+                                b: 160,
+                                a: 1,
+                            };
+
+                            borderColour = {
+                                r: 0,
+                                g: 0,
+                                b: 0,
+                                a: 1,
+                            };
+
+                            rounded = 0;
+                        }}>
+                            <AlarmClockOff class="text-black group-hover:scale-110" />
+                        </button>
+                    </TooltipTrigger>
+                    <TooltipContent class="bg-black text-white max-w-[400px] p-4">
+                        <p class="font-bold">Plain & Square</p>
+                        <p>Tech startups that look for versatility (easy to reuse across platforms) and simplicity. For example, Stripe amd Slack.</p>
+                    </TooltipContent>
+                </Tooltip>
+            </div>
+        </div>
+
+        <div class="group">
+            <a href="https://github.com/danjford/LogoBuilder" target="_blank" class="p-4 block hover:bg-muted-foreground/10 ">
+                <Github class="transition-all duration-300 group-hover:scale-110"/>
+            </a>
+        </div>
     </div>
 </header>
 
@@ -102,7 +165,7 @@
                                 {svgElements}
                             />
                         {:else}
-                            <BackgroundOptions bind:rounded bind:padding bind:shadow bind:shadowOptions bind:iconSize bind:hex bind:rgb bind:hsv />
+                            <BackgroundOptions bind:rounded bind:padding bind:shadow bind:shadowOptions bind:iconSize bind:hex bind:rgb={bgRgb}/>
                         {/if}
                 </div>
             </ScrollArea>
@@ -116,7 +179,7 @@
             <div class="w-screen max-w-full aspect-square md:w-[350px] md:h-[350px] lg:w-[400px] lg:h-[400px] xl:w-[600px] xl:h-[600px] bg-muted-foreground/10 border border-dashed border-foreground/10 border-2" style="padding: {padding}px;">
                 <div
                     class="w-full aspect-square overflow-hidden flex justify-center items-center shadow-{shadowOptions[shadow]}"
-                    style="background: rgba({rgb.r}, {rgb.g}, {rgb.b}, {rgb.a}); border-radius: {rounded}px;"
+                    style="background: rgba({bgRgb.r}, {bgRgb.g}, {bgRgb.b}, {bgRgb.a}); border-radius: {rounded}px;"
                 >
                     <span style="transform: rotate({rotate}deg);">
                         <svg

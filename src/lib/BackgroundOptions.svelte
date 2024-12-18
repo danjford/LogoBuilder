@@ -28,7 +28,7 @@
 
 <Slider
     value={[rounded]}
-    max={100}
+    max={300}
     step={1}
     onValueChange={(e) => {
         rounded = e[0];
