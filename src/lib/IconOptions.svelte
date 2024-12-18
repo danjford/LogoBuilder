@@ -8,6 +8,7 @@
     import { ScrollArea } from "./components/ui/scroll-area";
     import iconNodes from "lucide-static/icon-nodes.json";
     import { renderIcon } from "./icons";
+    import VirtualList from '@sveltejs/svelte-virtual-list';
 
     let {
         iconSize = $bindable(250),
@@ -30,6 +31,20 @@
     });
 
     let open = $state(false);
+
+    let start = $state();
+	let end = $state();
+
+    const ICONS_PER_ROW = 12;
+
+    // Group icons into rows
+    let groupedIcons = $derived.by(() => {
+        const rows = [];
+        for (let i = 0; i < filteredIcons.length; i += ICONS_PER_ROW) {
+            rows.push(filteredIcons.slice(i, i + ICONS_PER_ROW));
+        }
+        return rows;
+    });
 </script>
 
 <div class="flex flex-row justify-between">
@@ -57,8 +72,45 @@
 
         <Input type="text" placeholder="Search icons" bind:value={search} />
 
-        <ScrollArea class="h-full sm:h-[80vh]">
-            <div class="flex flex-wrap gap-2 justify-center">
+        <!-- <ScrollArea class="h-full sm:h-[80vh]"> -->
+
+        <div class="h-[60vh]">
+            <VirtualList items={groupedIcons} itemHeight={48} class="h-full" bind:start bind:end>
+                {#snippet children({ item })}
+                    <div class="flex flex-row gap-2 justify-center mb-2">
+                        {#each item as [key, node]}
+                            <Button 
+                                variant="ghost" 
+                                class="w-12 h-12 justify-center items-center bg-primary/10" 
+                                on:click={() => {
+                                    icon = key;
+                                    open = false;
+                                }}
+                            >
+                                <svg
+                                    width="48"
+                                    height="48"
+                                    viewBox="0 0 24 24"
+                                    fill="none"
+                                    stroke="currentColor"
+                                    stroke-width="2"
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                    class="pointer-events-none"
+                                >
+                                    {@html renderIcon(node)}
+                                </svg>
+                            </Button>
+                        {/each}
+                    </div>
+                {/snippet}
+            </VirtualList>
+        </div>
+        
+        <!-- {start} -->
+        <!-- {end} -->
+
+            <!-- <div class="flex flex-wrap gap-2 justify-center">
                 {#each filteredIcons as [key, node]}
                     <div class="flex flex-row justify-between">
                         <Button variant="ghost" class="w-12 h-12 justify-center items-center bg-primary/10" onclick={() => {
@@ -81,8 +133,8 @@
                         </Button>
                     </div>
                 {/each}
-            </div>
-        </ScrollArea>
+            </div> -->
+        <!-- </ScrollArea> -->
     </DialogContent>
 </Dialog>
 
