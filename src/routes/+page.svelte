@@ -66,11 +66,11 @@
     </div>
 </header>
 
-<div class="flex flex-row h-[calc(100vh-50px)]">
-    <aside class="h-full">
-        <div class="flex flex-row h-full">
-            <div class="p-2 border border-l-0 h-full">
-                <ul>
+<div class="flex flex-col md:flex-row h-[calc(100vh-50px)]">
+    <aside class="md:h-full">
+        <div class="flex flex-col md:flex-row h-full">
+            <div class="p-2 border border-l-0 md:h-full">
+                <ul class="flex flex-row md:flex-col">
                     <li>
                         <Button
                             variant="ghost"
@@ -88,7 +88,7 @@
                 </ul>
             </div>
 
-            <ScrollArea class="h-full">
+            <ScrollArea class="h-[40svh] md:h-full">
                 <div class="md:w-64 flex flex-col gap-4 flex-grow p-4 border border-l-0 h-full">
                         {#if activeType === "icon"}
                             <IconOptions
@@ -113,7 +113,7 @@
         <div class="blueprint"></div>
 
         <div class="flex flex-row justify-center items-center h-full">
-            <div class="w-[600px] h-[600px] bg-muted-foreground/10 border border-dashed border-foreground/10 border-2" style="padding: {padding}px;">
+            <div class="w-screen max-w-full aspect-square md:w-[350px] md:h-[350px] lg:w-[400px] lg:h-[400px] xl:w-[600px] xl:h-[600px] bg-muted-foreground/10 border border-dashed border-foreground/10 border-2" style="padding: {padding}px;">
                 <div
                     class="w-full aspect-square overflow-hidden flex justify-center items-center shadow-{shadowOptions[shadow]}"
                     style="background: rgba({rgb.r}, {rgb.g}, {rgb.b}, {rgb.a}); border-radius: {rounded}px;"
