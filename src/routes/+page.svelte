@@ -1,7 +1,6 @@
 <script lang="ts">
     import iconNodes from "lucide-static/icon-nodes.json";
     import { Button } from "$lib/components/ui/button";
-    import { browser } from "$app/environment";
     import BackgroundOptions from "$lib/BackgroundOptions.svelte";
     import IconOptions from "$lib/IconOptions.svelte";
     import { ScrollArea } from "$lib/components/ui/scroll-area";
@@ -182,9 +181,7 @@
                             stroke-width={borderWidth}
                             fill-opacity="{fillOpacity}%"
                         >
-                            {#if browser}
-                                {@html svgElements}
-                            {/if}
+                            {@html svgElements}
                         </svg>
                     </span>
                 </div>
