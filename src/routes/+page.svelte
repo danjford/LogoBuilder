@@ -6,27 +6,29 @@
     import { ScrollArea } from "$lib/components/ui/scroll-area";
     import { renderIcon } from "$lib/icons";
     import { Tooltip, TooltipContent, TooltipTrigger } from "$lib/components/ui/tooltip";
-    import { AlarmClockOff, Github } from "lucide-svelte";
+    import { AlarmClockOff, ChevronDown, Download, Github } from "lucide-svelte";
     import ThemeTooltip from "$lib/ThemeTooltip.svelte";
+    import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "$lib/components/ui/dropdown-menu";
 
     let activeType = $state("icon");
 
     let rounded = $state(86);
-    let padding = $state(16);
+    let padding = $state(48);
     let shadow = $state(0);
     let shadowOptions = ["none", "sm", "md", "lg", "xl", "2xl"];
-    let hex = $state("#f6f0dc");
-    let bgRgb = $state("rgba(137, 73, 255, 1)");
+    let bgRgb = $state("linear-gradient(45deg, #ef709b 0%, #ff930f 100%)");
 
     let iconSize = $state(250);
-    let icon = $state("flame");
+    let icon = $state("apple");
     let rotate = $state(0);
-    let borderWidth = $state(1);
+    let borderWidth = $state("2");
     let borderColour = $state("rgb(255, 255, 255)");
     let fillOpacity = $state(0);
     let fillColour = $state("rgb(255, 255, 255, 1)");
 
     let svg = $state();
+
+    let captureElement: HTMLElement | undefined = $state();
 
     let svgElements = $derived.by(() => {
         const foundIcon = iconNodes[icon];
@@ -35,6 +37,33 @@
 
         return renderIcon(foundIcon);
     });
+
+    const createSvg = () => {
+        return `
+        <svg xmlns="http://www.w3.org/2000/svg" width="400" height="400" viewBox="0 0 400 400">
+            <foreignObject width="100%" height="100%">
+                <div xmlns="http://www.w3.org/1999/xhtml" style="display: flex; height: 100%; width: 100%; padding: ${padding}px; box-sizing: border-box;">
+                    <div xmlns="http://www.w3.org/1999/xhtml"  style="background: ${bgRgb}; border-radius: ${rounded}px; display: flex; justify-content: center; align-items: center; height: 100%; width: 100%;">
+                        <span xmlns="http://www.w3.org/1999/xhtml" style="transform: rotate(${rotate}deg);">
+                            <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                viewBox="0 0 24 24"
+                                fill="${fillColour}"
+                                stroke="${borderColour}"
+                                width="${iconSize}"
+                                height="${iconSize}"
+                                stroke-width="${borderWidth}"
+                                fill-opacity="${fillOpacity}%"
+                            >
+                                ${svgElements}
+                            </svg>
+                        </span>
+                    </div>
+                </div>
+            </foreignObject>
+        </svg>
+        `;
+    };
 </script>
 
 <header class="h-[50px] overflow-hidden">
@@ -116,8 +145,70 @@
             </div>
         </div>
 
-        <div class="group">
-            <a href="https://github.com/danjford/LogoBuilder" target="_blank" class="p-4 block hover:bg-muted-foreground/10">
+        <div class="flex flex-row gap-2 items-center">
+            <DropdownMenu>
+                <DropdownMenuTrigger asChild let:builder>
+                    <Button builders={[builder]}>
+                        <span class="pr-2">Download</span>
+                        <ChevronDown size={16} />
+                    </Button>
+                </DropdownMenuTrigger>
+
+                <DropdownMenuContent class="w-[200px]">
+                    <DropdownMenuItem
+                        class="p-2 cursor-pointer"
+                        onclick={() => {
+                            const svg = createSvg();
+
+                            // Create a Blob and a link to download it as an SVG file
+                            const blob = new Blob([svg], { type: "image/svg+xml;charset=utf-8" });
+                            const link = document.createElement("a");
+                            link.href = URL.createObjectURL(blob);
+                            link.download = "icon.svg";
+
+                            // Trigger the download
+                            link.click();
+                        }}
+                    >
+                        <Download size={16} /><span class="pl-2">Download SVG</span>
+                    </DropdownMenuItem>
+                    <DropdownMenuItem
+                        class="p-2 cursor-pointer"
+                        onclick={() => {
+                            if (!captureElement) return;
+
+                            const svgString = createSvg();
+
+                            // Create an image from the SVG string
+                            const img = new Image();
+                            img.onload = () => {
+                                const canvas = document.createElement("canvas");
+                                canvas.width = 800;
+                                canvas.height = 800;
+                                const ctx = canvas.getContext("2d");
+
+                                if (ctx) {
+                                    ctx.imageSmoothingEnabled = true;
+                                    ctx.imageSmoothingQuality = "high";
+                                }
+
+                                ctx?.drawImage(img, 0, 0, 800, 800);
+
+                                // Create download link
+                                const link = document.createElement("a");
+                                link.href = canvas.toDataURL("image/png");
+                                link.download = "icon.png";
+                                link.click();
+                            };
+                            img.src = "data:image/svg+xml;base64," + btoa(svgString);
+                        }}
+                    >
+                        <Download size={16} /><span class="pl-2">Download PNG</span>
+                    </DropdownMenuItem>
+                </DropdownMenuContent>
+            </DropdownMenu>
+
+            <a href="https://github.com/danjford/LogoBuilder" target="_blank" class="p-4 block group hover:bg-muted-foreground/10">
                 <Github class="transition-all duration-300 group-hover:scale-110" />
             </a>
         </div>
@@ -165,6 +256,7 @@
             <div
                 class="w-screen max-w-full aspect-square md:w-[350px] md:h-[350px] lg:w-[400px] lg:h-[400px] xl:w-[600px] xl:h-[600px] bg-muted-foreground/10 border border-dashed border-foreground/10 border-2"
                 style="padding: {padding}px;"
+                bind:this={captureElement}
             >
                 <div
                     class="w-full aspect-square overflow-hidden flex justify-center items-center shadow-{shadowOptions[shadow]}"
