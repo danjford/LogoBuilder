@@ -1,12 +1,9 @@
 <script lang="ts">
-    import ColorPicker from 'react-best-gradient-color-picker'
-    import { ReactAdapter } from "svelte-react-kit";
     import { Button } from "./components/ui/button";
     import { Label } from "./components/ui/label";
     import { Slider } from "./components/ui/slider";
     import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "./components/ui/dialog";
     import { Input } from "./components/ui/input";
-    import { ScrollArea } from "./components/ui/scroll-area";
     import iconNodes from "lucide-static/icon-nodes.json";
     import { renderIcon } from "./icons";
     import VirtualList from '@sveltejs/svelte-virtual-list';
@@ -27,7 +24,7 @@
     let search = $state("");
 
     let filteredIcons = $derived.by(() => {
-        return Object.entries(iconNodes).filter(([key, node]) => {
+        return Object.entries(iconNodes).filter(([key]) => {
             return key.toLowerCase().includes(search.toLowerCase());
         });
     });
