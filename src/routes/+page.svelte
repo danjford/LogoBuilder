@@ -8,6 +8,7 @@
     import { renderIcon } from "$lib/icons";
     import { Tooltip, TooltipContent, TooltipTrigger } from "$lib/components/ui/tooltip";
     import { AlarmClockOff, Github } from "lucide-svelte";
+    import ThemeTooltip from "$lib/ThemeTooltip.svelte";
 
     let activeType = $state("icon");
 
@@ -16,16 +17,15 @@
     let shadow = $state(0);
     let shadowOptions = ["none", "sm", "md", "lg", "xl", "2xl"];
     let hex = $state("#f6f0dc");
-    let bgRgb = $state('rgba(137, 73, 255, 1)');
-
+    let bgRgb = $state("rgba(137, 73, 255, 1)");
 
     let iconSize = $state(250);
     let icon = $state("flame");
     let rotate = $state(0);
     let borderWidth = $state(1);
-    let borderColour = $state('rgb(255, 255, 255)');
+    let borderColour = $state("rgb(255, 255, 255)");
     let fillOpacity = $state(0);
-    let fillColour = $state('rgb(255, 255, 255, 1)');
+    let fillColour = $state("rgb(255, 255, 255, 1)");
 
     let svg = $state();
 
@@ -36,7 +36,6 @@
 
         return renderIcon(foundIcon);
     });
-
 </script>
 
 <header class="h-[50px] overflow-hidden">
@@ -44,49 +43,83 @@
         <div class="flex flex-row items-center gap-2 font-bold text-lg pl-4">Logo Builder</div>
 
         <div class="flex items-center">
-            <h2 class="text-muted-foreground text-sm">
-                Presets
-            </h2>
+            <h2 class="text-muted-foreground text-sm">Presets</h2>
             <div class="flex flex-row gap-4 px-2">
-                <Tooltip closeDelay={0}>
-                    <TooltipTrigger asChild>
-                        <button class="bg-black p-2 group" onclick={() => {
-                            bgRgb = 'rgba(0, 0, 0, 1)';
+                <ThemeTooltip
+                    class="bg-black"
+                    iconClass="text-white"
+                    title="Black & White"
+                    description="Great for startups that want to look professional, serious, and modern. For example, Apple and Nike."
+                    onclick={() => {
+                        bgRgb = "rgba(0, 0, 0, 1)";
 
-                            borderColour = 'rgb(255, 255, 255)';
-                        }}>
-                            <AlarmClockOff class="text-white group-hover:scale-110" />
-                        </button>
-                    </TooltipTrigger>
-                    <TooltipContent class="bg-black text-white max-w-[400px] p-4">
-                        <p class="font-bold">Black & White</p>
-                        <p>Great for startups that want to look professional, serious, and modern. For example, Apple and Nike.</p>
-                    </TooltipContent>
-                </Tooltip>
+                        borderColour = "rgb(255, 255, 255)";
 
-                <Tooltip closeDelay={0}>
-                    <TooltipTrigger asChild>
-                        <button class="bg-[#ffeda0] p-2 group" onclick={() => {
-                            bgRgb = 'rgba(255, 237, 160, 1)';
+                        fillOpacity = 0;
+                    }}
+                />
 
-                            borderColour = 'rgb(0, 0, 0)';
+                <ThemeTooltip
+                    class="bg-[#ffeda0]"
+                    iconClass="text-black"
+                    title="Plain & Square"
+                    description="Tech startups that look for versatility (easy to reuse across platforms) and simplicity. For example, Stripe amd Slack."
+                    iconFill="rgb(255, 255, 255)"
+                    onclick={() => {
+                        bgRgb = "rgba(255, 237, 160, 1)";
 
-                            rounded = 0;
-                        }}>
-                            <AlarmClockOff class="text-black group-hover:scale-110" />
-                        </button>
-                    </TooltipTrigger>
-                    <TooltipContent class="bg-black text-white max-w-[400px] p-4">
-                        <p class="font-bold">Plain & Square</p>
-                        <p>Tech startups that look for versatility (easy to reuse across platforms) and simplicity. For example, Stripe amd Slack.</p>
-                    </TooltipContent>
-                </Tooltip>
+                        borderColour = "rgb(0, 0, 0)";
+
+                        rounded = 0;
+
+                        fillOpacity = 100;
+                        fillColour = "rgb(255, 255, 255)";
+                    }}
+                />
+
+                <ThemeTooltip
+                    class="rounded-md bg-gradient-to-tr from-[rgb(239,112,155)] to-[rgb(236,160,255)]"
+                    iconClass="text-black"
+                    title="Rounded & Gradient"
+                    description="Great for startups that want to look friendly and trendy. For example, Instagram."
+                    iconFill="rgb(255, 255, 255)"
+                    onclick={() => {
+                        bgRgb = "linear-gradient(45deg, rgb(239, 112, 155) 0%, rgb(236, 160, 255) 100%)";
+
+                        borderColour = "rgb(0, 0, 0)";
+
+                        fillOpacity = 100;
+
+                        fillColour = "rgb(255, 255, 255)";
+
+                        rounded = 100;
+                    }}
+                />
+
+                <ThemeTooltip
+                    class="rounded-full bg-[radial-gradient(circle,_rgb(198,248,255)_0%,_rgb(169,255,104)_100%)]"
+                    iconClass="text-black"
+                    iconFill="rgb(255, 255, 255)"
+                    title="Circle & Gradient"
+                    description="Great for startups that want to look friendly and trendy. For example, Instagram."
+                    onclick={() => {
+                        bgRgb = "radial-gradient(circle, rgb(198, 248, 255) 0%, rgb(169, 255, 104) 100%)";
+
+                        borderColour = "rgb(0, 0, 0)";
+
+                        fillOpacity = 100;
+
+                        fillColour = "rgb(255, 255, 255)";
+
+                        rounded = 300;
+                    }}
+                />
             </div>
         </div>
 
         <div class="group">
-            <a href="https://github.com/danjford/LogoBuilder" target="_blank" class="p-4 block hover:bg-muted-foreground/10 ">
-                <Github class="transition-all duration-300 group-hover:scale-110"/>
+            <a href="https://github.com/danjford/LogoBuilder" target="_blank" class="p-4 block hover:bg-muted-foreground/10">
+                <Github class="transition-all duration-300 group-hover:scale-110" />
             </a>
         </div>
     </div>
@@ -116,20 +149,11 @@
 
             <ScrollArea class="h-[40svh] md:h-full">
                 <div class="md:w-64 flex flex-col gap-4 flex-grow p-4 border border-l-0 h-full">
-                        {#if activeType === "icon"}
-                            <IconOptions
-                                bind:iconSize
-                                bind:icon
-                                bind:rotate
-                                bind:borderWidth
-                                bind:borderColour
-                                bind:fillOpacity
-                                bind:fillColour
-                                {svgElements}
-                            />
-                        {:else}
-                            <BackgroundOptions bind:rounded bind:padding bind:shadow bind:shadowOptions bind:color={bgRgb}/>
-                        {/if}
+                    {#if activeType === "icon"}
+                        <IconOptions bind:iconSize bind:icon bind:rotate bind:borderWidth bind:borderColour bind:fillOpacity bind:fillColour {svgElements} />
+                    {:else}
+                        <BackgroundOptions bind:rounded bind:padding bind:shadow bind:shadowOptions bind:color={bgRgb} />
+                    {/if}
                 </div>
             </ScrollArea>
         </div>
@@ -139,7 +163,10 @@
         <div class="blueprint"></div>
 
         <div class="flex flex-row justify-center items-center h-full">
-            <div class="w-screen max-w-full aspect-square md:w-[350px] md:h-[350px] lg:w-[400px] lg:h-[400px] xl:w-[600px] xl:h-[600px] bg-muted-foreground/10 border border-dashed border-foreground/10 border-2" style="padding: {padding}px;">
+            <div
+                class="w-screen max-w-full aspect-square md:w-[350px] md:h-[350px] lg:w-[400px] lg:h-[400px] xl:w-[600px] xl:h-[600px] bg-muted-foreground/10 border border-dashed border-foreground/10 border-2"
+                style="padding: {padding}px;"
+            >
                 <div
                     class="w-full aspect-square overflow-hidden flex justify-center items-center shadow-{shadowOptions[shadow]}"
                     style="background: {bgRgb}; border-radius: {rounded}px;"

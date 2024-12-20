@@ -65,7 +65,7 @@
             </svg>
         </Button>
     </DialogTrigger>
-    <DialogContent class="w-full max-w-screen-md">
+    <DialogContent class="w-full max-w-screen-md z-[1000]">
         <DialogHeader>
             <DialogTitle>Pick an Icon</DialogTitle>
         </DialogHeader>
