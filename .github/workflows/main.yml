@@ -33,8 +33,6 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-node-
 
-      - name: temp clean
-        run: rm -rf node_modules
       - name: Install dependencies
         run: npm ci
 
