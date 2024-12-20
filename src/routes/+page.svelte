@@ -1,9 +1,6 @@
 <script lang="ts">
     import iconNodes from "lucide-static/icon-nodes.json";
     import { Button } from "$lib/components/ui/button";
-    import { Label } from "$lib/components/ui/label";
-    import { Slider } from "$lib/components/ui/slider";
-    import ColorPicker, { ChromeVariant } from "svelte-awesome-color-picker";
     import { browser } from "$app/environment";
     import BackgroundOptions from "$lib/BackgroundOptions.svelte";
     import IconOptions from "$lib/IconOptions.svelte";
@@ -19,30 +16,16 @@
     let shadow = $state(0);
     let shadowOptions = ["none", "sm", "md", "lg", "xl", "2xl"];
     let hex = $state("#f6f0dc");
-    let bgRgb = $state({
-        r: 137,
-        g: 73,
-        b: 255,
-        a: 1,
-    });
+    let bgRgb = $state('rgba(137, 73, 255, 1)');
+
 
     let iconSize = $state(250);
     let icon = $state("flame");
     let rotate = $state(0);
     let borderWidth = $state(1);
-    let borderColour = $state({
-        r: 255,
-        g: 255,
-        b: 255,
-        a: 1,
-    });
+    let borderColour = $state('rgb(255, 255, 255)');
     let fillOpacity = $state(0);
-    let fillColour = $state({
-        r: 255,
-        g: 255,
-        b: 255,
-        a: 1,
-    });
+    let fillColour = $state('rgb(255, 255, 255, 1)');
 
     let svg = $state();
 
@@ -66,21 +49,11 @@
             </h2>
             <div class="flex flex-row gap-4 px-2">
                 <Tooltip closeDelay={0}>
-                    <TooltipTrigger>
+                    <TooltipTrigger asChild>
                         <button class="bg-black p-2 group" onclick={() => {
-                            bgRgb = {
-                                r: 0,
-                                g: 0,
-                                b: 0,
-                                a: 1,
-                            };
+                            bgRgb = 'rgba(0, 0, 0, 1)';
 
-                            borderColour = {
-                                r: 255,
-                                g: 255,
-                                b: 255,
-                                a: 1,
-                            };
+                            borderColour = 'rgb(255, 255, 255)';
                         }}>
                             <AlarmClockOff class="text-white group-hover:scale-110" />
                         </button>
@@ -92,21 +65,11 @@
                 </Tooltip>
 
                 <Tooltip closeDelay={0}>
-                    <TooltipTrigger>
+                    <TooltipTrigger asChild>
                         <button class="bg-[#ffeda0] p-2 group" onclick={() => {
-                            bgRgb = {
-                                r: 255,
-                                g: 237,
-                                b: 160,
-                                a: 1,
-                            };
+                            bgRgb = 'rgba(255, 237, 160, 1)';
 
-                            borderColour = {
-                                r: 0,
-                                g: 0,
-                                b: 0,
-                                a: 1,
-                            };
+                            borderColour = 'rgb(0, 0, 0)';
 
                             rounded = 0;
                         }}>
@@ -165,7 +128,7 @@
                                 {svgElements}
                             />
                         {:else}
-                            <BackgroundOptions bind:rounded bind:padding bind:shadow bind:shadowOptions bind:iconSize bind:hex bind:rgb={bgRgb}/>
+                            <BackgroundOptions bind:rounded bind:padding bind:shadow bind:shadowOptions bind:color={bgRgb}/>
                         {/if}
                 </div>
             </ScrollArea>
@@ -179,14 +142,14 @@
             <div class="w-screen max-w-full aspect-square md:w-[350px] md:h-[350px] lg:w-[400px] lg:h-[400px] xl:w-[600px] xl:h-[600px] bg-muted-foreground/10 border border-dashed border-foreground/10 border-2" style="padding: {padding}px;">
                 <div
                     class="w-full aspect-square overflow-hidden flex justify-center items-center shadow-{shadowOptions[shadow]}"
-                    style="background: rgba({bgRgb.r}, {bgRgb.g}, {bgRgb.b}, {bgRgb.a}); border-radius: {rounded}px;"
+                    style="background: {bgRgb}; border-radius: {rounded}px;"
                 >
                     <span style="transform: rotate({rotate}deg);">
                         <svg
                             bind:this={svg}
                             viewBox="0 0 24 24"
-                            fill={`rgba(${fillColour.r}, ${fillColour.g}, ${fillColour.b}, ${fillColour.a})`}
-                            stroke={`rgba(${borderColour.r}, ${borderColour.g}, ${borderColour.b}, ${borderColour.a})`}
+                            fill={fillColour}
+                            stroke={borderColour}
                             width={iconSize}
                             height={iconSize}
                             stroke-width={borderWidth}

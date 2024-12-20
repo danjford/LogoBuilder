@@ -1,5 +1,6 @@
 <script lang="ts">
-    import ColorPicker, { ChromeVariant } from "svelte-awesome-color-picker";
+    import ColorPicker from 'react-best-gradient-color-picker'
+    import { ReactAdapter } from "svelte-react-kit";
     import { Button } from "./components/ui/button";
     import { Label } from "./components/ui/label";
     import { Slider } from "./components/ui/slider";
@@ -9,15 +10,16 @@
     import iconNodes from "lucide-static/icon-nodes.json";
     import { renderIcon } from "./icons";
     import VirtualList from '@sveltejs/svelte-virtual-list';
+    import ReactColorPicker from './ReactColorPicker.svelte';
 
     let {
         iconSize = $bindable(250),
         icon = $bindable("fire-extinguisher"),
         rotate = $bindable(0),
         borderWidth = $bindable(1),
-        borderColour = $bindable({ r: 255, g: 255, b: 255, a: 1 }),
+        borderColour = $bindable('rgb(255, 255, 255, 1)'),
         fillOpacity = $bindable(0),
-        fillColour = $bindable({ r: 255, g: 255, b: 255, a: 1 }),
+        fillColour = $bindable('rgb(255, 255, 255, 1)'),
         svgElements = $bindable(""),
     } = $props();
 
@@ -45,6 +47,7 @@
         }
         return rows;
     });
+
 </script>
 
 <div class="flex flex-row justify-between">
@@ -187,7 +190,19 @@
     <Label class="text-md font-bold">Border Colour</Label>
 </div>
 
-<ColorPicker --cp-text-color="black" bind:rgb={borderColour} position="responsive" components={ChromeVariant} sliderDirection="horizontal" isDialog={false} />
+
+
+
+<!-- <ColorPicker --cp-text-color="black" bind:rgb={borderColour} position="responsive" components={ChromeVariant} sliderDirection="horizontal" isDialog={false} /> -->
+
+
+<ReactColorPicker
+    bind:color={borderColour}
+    disableDarkMode={true}
+    hideControls={true}
+    hidePresets={true}
+    hideOpacity={true}
+/>
 
 <div class="flex flex-row justify-between">
     <Label class="text-md font-bold">Fill Opacity</Label>
@@ -208,4 +223,12 @@
     <Label class="text-md font-bold">Fill Colour</Label>
 </div>
 
-<ColorPicker --cp-text-color="black" bind:rgb={fillColour} position="responsive" components={ChromeVariant} sliderDirection="horizontal" isDialog={false} />
+
+
+<ReactColorPicker
+    bind:color={fillColour}
+    disableDarkMode={true}
+    hideControls={true}
+    hidePresets={true}
+    hideOpacity={true}
+/>

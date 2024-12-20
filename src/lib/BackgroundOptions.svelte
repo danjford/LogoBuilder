@@ -1,23 +1,15 @@
 <script lang="ts">
-    import iconNodes from "lucide-static/icon-nodes.json";
-    import { Button } from "$lib/components/ui/button";
     import { Label } from "$lib/components/ui/label";
     import { Slider } from "$lib/components/ui/slider";
-    import ColorPicker, { ChromeVariant } from "svelte-awesome-color-picker";
-    import { browser } from "$app/environment";
+    import ReactColorPicker from "./ReactColorPicker.svelte";
 
     let {
         rounded = $bindable(),
         padding = $bindable(),
         shadow = $bindable(),
         shadowOptions = $bindable(),
-        iconSize = $bindable(),
-        hex = $bindable(),
-        rgb = $bindable(),
-        hsv = $bindable(),
-        color = $bindable(),
+        color = $bindable("rgba(137, 73, 255, 1)"),
     } = $props();
-
 
 </script>
 
@@ -77,13 +69,6 @@
     <Label class="text-md font-bold">Background</Label>
 </div>
 
-<ColorPicker
-    --cp-text-color="black"
-    bind:hex
-    bind:rgb
-    bind:color
-    position="responsive"
-    components={ChromeVariant}
-    sliderDirection="horizontal"
-    isDialog={false}
-/>
+
+
+<ReactColorPicker bind:color={color} />
