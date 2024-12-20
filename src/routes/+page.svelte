@@ -39,8 +39,12 @@
     });
 
     const createSvg = () => {
+
+        let width = captureElement?.clientWidth;
+        let height = captureElement?.clientHeight;
+
         return `
-        <svg xmlns="http://www.w3.org/2000/svg" width="400" height="400" viewBox="0 0 400 400">
+        <svg xmlns="http://www.w3.org/2000/svg" width="${width}" height="${height}" viewBox="0 0 ${width} ${height}">
             <foreignObject width="100%" height="100%">
                 <div xmlns="http://www.w3.org/1999/xhtml" style="display: flex; height: 100%; width: 100%; padding: ${padding}px; box-sizing: border-box;">
                     <div xmlns="http://www.w3.org/1999/xhtml"  style="background: ${bgRgb}; border-radius: ${rounded}px; display: flex; justify-content: center; align-items: center; height: 100%; width: 100%;">
@@ -183,8 +187,12 @@
                             const img = new Image();
                             img.onload = () => {
                                 const canvas = document.createElement("canvas");
-                                canvas.width = 800;
-                                canvas.height = 800;
+
+                                let width = captureElement?.clientWidth ?? 800;
+                                let height = captureElement?.clientHeight ?? 800;
+
+                                canvas.width = width;
+                                canvas.height = height;
                                 const ctx = canvas.getContext("2d");
 
                                 if (ctx) {
@@ -192,7 +200,7 @@
                                     ctx.imageSmoothingQuality = "high";
                                 }
 
-                                ctx?.drawImage(img, 0, 0, 800, 800);
+                                ctx?.drawImage(img, 0, 0, width, height);
 
                                 // Create download link
                                 const link = document.createElement("a");
